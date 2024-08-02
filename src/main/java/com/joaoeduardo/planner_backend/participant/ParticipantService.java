@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,4 +45,13 @@ public class ParticipantService {
 
     }
 
+    public List<ParticipantData> getAllParticipants(UUID tripId) {
+
+        List<Participant> participants = participantRepository.findByTripId(tripId);
+
+        List<ParticipantData> rawParticipants = participants.stream().map(ParticipantData::new).toList();
+
+        return rawParticipants;
+
+    }
 }

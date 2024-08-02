@@ -4,4 +4,8 @@ public record ParticipantRequestPayload(
         String name,
         String email
 ) {
+    public ParticipantRequestPayload(Participant participant) {
+
+        this(participant.getName(), participant.getEmail());
+    }
 }

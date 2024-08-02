@@ -1,16 +1,13 @@
 package com.joaoeduardo.planner_backend.trip;
 
-import com.joaoeduardo.planner_backend.participant.Participant;
-import com.joaoeduardo.planner_backend.participant.ParticipantCreateResponse;
-import com.joaoeduardo.planner_backend.participant.ParticipantRequestPayload;
-import com.joaoeduardo.planner_backend.participant.ParticipantService;
+import com.joaoeduardo.planner_backend.participant.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,10 +16,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TripController {
 
-//    @Autowired
+
     private final ParticipantService participantService;
 
-//    @Autowired
     private final TripRepository tripRepository;
 
 
@@ -106,6 +102,25 @@ public class TripController {
 
 
             return ResponseEntity.ok(newParticipantResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @GetMapping("/{tripId}/participants")
+    public ResponseEntity<List<ParticipantData>> getAllParticipants(@PathVariable UUID tripId){
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+
+        if(trip.isPresent()){
+
+            Trip rawTrip = trip.get();
+
+            List<ParticipantData> participants = participantService.getAllParticipants(rawTrip.getId());
+
+
+            return ResponseEntity.ok(participants);
         }
 
         return ResponseEntity.notFound().build();
