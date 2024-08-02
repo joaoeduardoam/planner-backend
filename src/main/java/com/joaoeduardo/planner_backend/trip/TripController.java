@@ -1,5 +1,8 @@
 package com.joaoeduardo.planner_backend.trip;
 
+import com.joaoeduardo.planner_backend.participant.Participant;
+import com.joaoeduardo.planner_backend.participant.ParticipantCreateResponse;
+import com.joaoeduardo.planner_backend.participant.ParticipantRequestPayload;
 import com.joaoeduardo.planner_backend.participant.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +39,18 @@ public class TripController {
 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Trip> getTripDetails(@PathVariable UUID id){
-        Optional<Trip> trip = tripRepository.findById(id);
+    @GetMapping("/{tripId}")
+    public ResponseEntity<Trip> getTripDetails(@PathVariable UUID tripId){
+        Optional<Trip> trip = tripRepository.findById(tripId);
 
         return trip.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
 
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Trip> updateTrip(@PathVariable UUID id,@RequestBody TripRequestPayload tripRequestPayload){
+    @PutMapping("/{tripId}")
+    public ResponseEntity<Trip> updateTrip(@PathVariable UUID tripId,@RequestBody TripRequestPayload tripRequestPayload){
 
-        Optional<Trip> trip = tripRepository.findById(id);
+        Optional<Trip> trip = tripRepository.findById(tripId);
 
         if(trip.isPresent()){
 
@@ -65,10 +68,10 @@ public class TripController {
 
     }
 
-    @GetMapping("/{id}/confirm")
-    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID id){
+    @GetMapping("/{tripId}/confirm")
+    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID tripId){
 
-        Optional<Trip> trip = tripRepository.findById(id);
+        Optional<Trip> trip = tripRepository.findById(tripId);
 
         if(trip.isPresent()){
 
@@ -76,9 +79,33 @@ public class TripController {
             rawTrip.setIsConfirmed(true);
 
             tripRepository.save(rawTrip);
-            participantService.triggerConfirmationEmailToParticipants(id);
+            participantService.triggerConfirmationEmailToParticipants(rawTrip);
 
             return ResponseEntity.ok(rawTrip);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @PostMapping("/{tripId}/invite")
+    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantRequestPayload participantRequestPayload){
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+
+        if(trip.isPresent()){
+
+            Trip rawTrip = trip.get();
+
+            ParticipantCreateResponse newParticipantResponse= participantService.registerParticipantToEvent(participantRequestPayload.email(), rawTrip);
+
+            if (rawTrip.getIsConfirmed()){
+                participantService.triggerConfirmationEmailToParticipant(rawTrip, participantRequestPayload.email());
+            }
+
+
+
+            return ResponseEntity.ok(newParticipantResponse);
         }
 
         return ResponseEntity.notFound().build();

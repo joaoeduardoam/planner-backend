@@ -4,9 +4,7 @@ import com.joaoeduardo.planner_backend.trip.Trip;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +22,25 @@ public class ParticipantService {
 
     }
 
+    public ParticipantCreateResponse registerParticipantToEvent(String email, Trip trip){
 
-    public void triggerConfirmationEmailToParticipants(UUID tripId){
+        Participant newParticipant = new Participant(email,trip);
 
+        participantRepository.save(newParticipant);
+
+        System.out.println("ID Participant: "+newParticipant.getId());
+
+        return new ParticipantCreateResponse(newParticipant.getId());
+
+    }
+
+
+    public void triggerConfirmationEmailToParticipants(Trip trip){
+
+
+    }
+
+    public void triggerConfirmationEmailToParticipant(Trip trip, String email){
 
     }
 
