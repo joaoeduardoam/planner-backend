@@ -1,9 +1,9 @@
 package com.joaoeduardo.planner_backend.trip;
 
-import com.joaoeduardo.planner_backend.activities.ActivityData;
-import com.joaoeduardo.planner_backend.activities.ActivityRequestPayload;
-import com.joaoeduardo.planner_backend.activities.ActivityResponse;
-import com.joaoeduardo.planner_backend.activities.ActivityService;
+import com.joaoeduardo.planner_backend.activity.ActivityData;
+import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
+import com.joaoeduardo.planner_backend.activity.ActivityResponse;
+import com.joaoeduardo.planner_backend.activity.ActivityService;
 import com.joaoeduardo.planner_backend.participant.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

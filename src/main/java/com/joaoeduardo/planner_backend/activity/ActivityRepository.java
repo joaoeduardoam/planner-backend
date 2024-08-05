@@ -1,6 +1,5 @@
-package com.joaoeduardo.planner_backend.activities;
+package com.joaoeduardo.planner_backend.activity;
 
-import com.joaoeduardo.planner_backend.participant.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.joaoeduardo.planner_backend.activities;
+package com.joaoeduardo.planner_backend.activity;
 
 import java.util.UUID;
 

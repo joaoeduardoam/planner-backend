@@ -1,4 +1,4 @@
-package com.joaoeduardo.planner_backend.activities;
+package com.joaoeduardo.planner_backend.link;
 
 import com.joaoeduardo.planner_backend.trip.Trip;
 import jakarta.persistence.*;
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "activities")
+@Table(name = "link")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Activity {
+public class Link {
 
 
     @Id
@@ -22,8 +22,8 @@ public class Activity {
     private UUID id;
 
 
-    @Column(name = "occurs_at", nullable = false)
-    private LocalDateTime occursAt;
+    @Column(nullable = false)
+    private String url;
 
     @Column(nullable = false)
     private String title;

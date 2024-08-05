@@ -1,7 +1,5 @@
-package com.joaoeduardo.planner_backend.activities;
+package com.joaoeduardo.planner_backend.activity;
 
-import com.joaoeduardo.planner_backend.participant.Participant;
-import com.joaoeduardo.planner_backend.participant.ParticipantData;
 import com.joaoeduardo.planner_backend.trip.Trip;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
