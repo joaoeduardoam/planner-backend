@@ -1,5 +1,8 @@
 package com.joaoeduardo.planner_backend.trip;
 
+import com.joaoeduardo.planner_backend.activities.ActivityRequestPayload;
+import com.joaoeduardo.planner_backend.activities.ActivityResponse;
+import com.joaoeduardo.planner_backend.activities.ActivityService;
 import com.joaoeduardo.planner_backend.participant.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ public class TripController {
 
 
     private final ParticipantService participantService;
+
+    private final ActivityService activityService;
 
     private final TripRepository tripRepository;
 
@@ -121,6 +126,26 @@ public class TripController {
 
 
             return ResponseEntity.ok(participants);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+
+    @PostMapping("/{tripId}/activities")
+    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID tripId, @RequestBody ActivityRequestPayload activityRequestPayload){
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+
+        if(trip.isPresent()){
+
+            Trip rawTrip = trip.get();
+
+            ActivityResponse activityResponse= activityService.registerActivity(activityRequestPayload, rawTrip);
+
+
+            return ResponseEntity.ok(activityResponse);
         }
 
         return ResponseEntity.notFound().build();

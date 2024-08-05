@@ -2,10 +2,7 @@ package com.joaoeduardo.planner_backend.activities;
 
 import com.joaoeduardo.planner_backend.trip.Trip;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Activity {
 
 
@@ -28,10 +26,11 @@ public class Activity {
     private LocalDateTime occursAt;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
+
 
 }
