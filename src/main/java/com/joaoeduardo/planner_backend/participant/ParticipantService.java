@@ -49,9 +49,9 @@ public class ParticipantService {
 
         List<Participant> participants = participantRepository.findByTripId(tripId);
 
-        List<ParticipantData> rawParticipants = participants.stream().map(ParticipantData::new).toList();
+        List<ParticipantData> participantsData = participants.stream().map(ParticipantData::new).toList();
 
-        return rawParticipants;
+        return participantsData;
 
     }
 }

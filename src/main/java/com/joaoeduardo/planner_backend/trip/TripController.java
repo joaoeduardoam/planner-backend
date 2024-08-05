@@ -1,5 +1,6 @@
 package com.joaoeduardo.planner_backend.trip;
 
+import com.joaoeduardo.planner_backend.activities.ActivityData;
 import com.joaoeduardo.planner_backend.activities.ActivityRequestPayload;
 import com.joaoeduardo.planner_backend.activities.ActivityResponse;
 import com.joaoeduardo.planner_backend.activities.ActivityService;
@@ -146,6 +147,25 @@ public class TripController {
 
 
             return ResponseEntity.ok(activityResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @GetMapping("/{tripId}/activities")
+    public ResponseEntity<List<ActivityData>> getAllActivities(@PathVariable UUID tripId){
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+
+        if(trip.isPresent()){
+
+            Trip rawTrip = trip.get();
+
+            List<ActivityData> activities = activityService.getAllActivities(rawTrip.getId());
+
+
+            return ResponseEntity.ok(activities);
         }
 
         return ResponseEntity.notFound().build();

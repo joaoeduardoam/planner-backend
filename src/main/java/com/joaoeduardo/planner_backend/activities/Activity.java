@@ -33,4 +33,6 @@ public class Activity {
     private Trip trip;
 
 
+
+
 }

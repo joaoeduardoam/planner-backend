@@ -1,8 +1,13 @@
 package com.joaoeduardo.planner_backend.activities;
 
+import com.joaoeduardo.planner_backend.participant.Participant;
+import com.joaoeduardo.planner_backend.participant.ParticipantData;
 import com.joaoeduardo.planner_backend.trip.Trip;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +26,13 @@ public class ActivityService {
 
         return new ActivityResponse(newActivity.getId());
 
+    }
+
+    public List<ActivityData> getAllActivities(UUID tripId) {
+        List<Activity> activities = activityRepository.findByTripId(tripId);
+
+        List<ActivityData> activitiesData = activities.stream().map(ActivityData::new).toList();
+
+        return activitiesData;
     }
 }
