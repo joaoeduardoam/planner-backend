@@ -4,6 +4,10 @@ import com.joaoeduardo.planner_backend.activity.ActivityData;
 import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
 import com.joaoeduardo.planner_backend.activity.ActivityResponse;
 import com.joaoeduardo.planner_backend.activity.ActivityService;
+import com.joaoeduardo.planner_backend.link.LinkData;
+import com.joaoeduardo.planner_backend.link.LinkRequestPayload;
+import com.joaoeduardo.planner_backend.link.LinkResponse;
+import com.joaoeduardo.planner_backend.link.LinkService;
 import com.joaoeduardo.planner_backend.participant.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,8 @@ public class TripController {
     private final ParticipantService participantService;
 
     private final ActivityService activityService;
+
+    private final LinkService linkService;
 
     private final TripRepository tripRepository;
 
@@ -166,6 +172,45 @@ public class TripController {
 
 
             return ResponseEntity.ok(activities);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+
+    @PostMapping("/{tripId}/links")
+    public ResponseEntity<LinkResponse> registerLink(@PathVariable UUID tripId, @RequestBody LinkRequestPayload linkRequestPayload){
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+
+        if(trip.isPresent()){
+
+            Trip rawTrip = trip.get();
+
+            LinkResponse linkResponse= linkService.registerLink(linkRequestPayload, rawTrip);
+
+
+            return ResponseEntity.ok(linkResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @GetMapping("/{tripId}/links")
+    public ResponseEntity<List<LinkData>> getAllLinks(@PathVariable UUID tripId){
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+
+        if(trip.isPresent()){
+
+            Trip rawTrip = trip.get();
+
+            List<LinkData> links = linkService.getAllLinks(rawTrip.getId());
+
+
+            return ResponseEntity.ok(links);
         }
 
         return ResponseEntity.notFound().build();

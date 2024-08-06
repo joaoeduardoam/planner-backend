@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "link")
+@Table(name = "links")
 @Getter
 @Setter
 @AllArgsConstructor
