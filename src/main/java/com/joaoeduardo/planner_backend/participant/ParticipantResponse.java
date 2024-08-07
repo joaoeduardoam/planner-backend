@@ -2,7 +2,7 @@ package com.joaoeduardo.planner_backend.participant;
 
 import java.util.UUID;
 
-public record ParticipantCreateResponse(
+public record ParticipantResponse(
         UUID participantId
 ) {
 }

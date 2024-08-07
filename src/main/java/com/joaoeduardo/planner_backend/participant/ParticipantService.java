@@ -1,10 +1,14 @@
 package com.joaoeduardo.planner_backend.participant;
 
+import com.joaoeduardo.planner_backend.participant.exception.ParticipantNotFoundException;
 import com.joaoeduardo.planner_backend.trip.Trip;
+import com.joaoeduardo.planner_backend.trip.exception.TripNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,11 +23,10 @@ public class ParticipantService {
 
         participantRepository.saveAll(participants);
 
-        System.out.println(participants.get(0).getId());
 
     }
 
-    public ParticipantCreateResponse registerParticipantToEvent(String email, Trip trip){
+    public ParticipantResponse registerParticipantByTrip(String email, Trip trip){
 
         Participant newParticipant = new Participant(email,trip);
 
@@ -31,7 +34,7 @@ public class ParticipantService {
 
         System.out.println("ID Participant: "+newParticipant.getId());
 
-        return new ParticipantCreateResponse(newParticipant.getId());
+        return new ParticipantResponse(newParticipant.getId());
 
     }
 
@@ -54,4 +57,38 @@ public class ParticipantService {
         return participantsData;
 
     }
+
+    public ParticipantData confirmParticipant(String name, UUID participantId) {
+
+        Optional<Participant> participant = participantRepository.findById(participantId);
+
+        if(participant.isPresent()){
+
+            Participant rawParticipant = participant.get();
+            rawParticipant.setIsConfirmed(true);
+            rawParticipant.setName(name);
+
+            participantRepository.save(rawParticipant);
+
+            this.triggerConfirmationEmailToParticipant(rawParticipant.getTrip(), rawParticipant.getEmail());
+
+            return new ParticipantData(rawParticipant);
+        }
+
+        throw new ParticipantNotFoundException("Participant Not Found with ID: "+participantId);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
