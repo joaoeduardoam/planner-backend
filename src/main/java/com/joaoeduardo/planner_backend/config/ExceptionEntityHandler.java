@@ -21,6 +21,11 @@ public class ExceptionEntityHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleValidationException(ValidationException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Object Not Found with provided ID!");

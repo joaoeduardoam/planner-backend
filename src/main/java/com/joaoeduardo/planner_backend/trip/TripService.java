@@ -9,12 +9,11 @@ import com.joaoeduardo.planner_backend.link.LinkRequestPayload;
 import com.joaoeduardo.planner_backend.link.LinkResponse;
 import com.joaoeduardo.planner_backend.link.LinkService;
 import com.joaoeduardo.planner_backend.participant.ParticipantData;
-import com.joaoeduardo.planner_backend.participant.ParticipantRequestPayload;
 import com.joaoeduardo.planner_backend.participant.ParticipantResponse;
 import com.joaoeduardo.planner_backend.participant.ParticipantService;
 import com.joaoeduardo.planner_backend.trip.exception.TripNotFoundException;
+import com.joaoeduardo.planner_backend.trip.validation.TripValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,9 +34,17 @@ public class TripService {
 
     private final LinkService linkService;
 
+    private final List<TripValidator> validators;
+
+
+
+
+
     public Trip createTrip(TripRequestPayload tripRequestPayload) {
 
         Trip newTrip = new Trip(tripRequestPayload);
+
+        validators.forEach( v -> v.validate(tripRequestPayload));
 
         tripRepository.save(newTrip);
 
@@ -46,9 +53,6 @@ public class TripService {
         return newTrip;
 
     }
-
-
-
 
     public Trip getTripDetails(UUID tripId) {
 
