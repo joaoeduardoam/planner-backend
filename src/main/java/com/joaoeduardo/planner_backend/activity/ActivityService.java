@@ -4,6 +4,8 @@ import com.joaoeduardo.planner_backend.trip.Trip;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,11 +15,13 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
 
-    public ActivityResponse registerActivity(ActivityRequestPayload payload, Trip trip){
+    public ActivityResponse registerActivity(ActivityRequestPayload activityRequestPayload, Trip trip){
+
+        LocalDateTime occursAt = LocalDateTime.parse(activityRequestPayload.occurs_at(), DateTimeFormatter.ISO_DATE_TIME);
 
         Activity newActivity = Activity.builder()
-                .title(payload.title())
-                .occursAt(payload.occurs_at())
+                .title(activityRequestPayload.title())
+                .occursAt(occursAt)
                 .trip(trip).build();
 
         activityRepository.save(newActivity);

@@ -3,11 +3,9 @@ package com.joaoeduardo.planner_backend.trip;
 import com.joaoeduardo.planner_backend.activity.ActivityData;
 import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
 import com.joaoeduardo.planner_backend.activity.ActivityResponse;
-import com.joaoeduardo.planner_backend.activity.ActivityService;
 import com.joaoeduardo.planner_backend.link.LinkData;
 import com.joaoeduardo.planner_backend.link.LinkRequestPayload;
 import com.joaoeduardo.planner_backend.link.LinkResponse;
-import com.joaoeduardo.planner_backend.link.LinkService;
 import com.joaoeduardo.planner_backend.participant.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +20,7 @@ import java.util.UUID;
 public class TripController {
 
 
-    private final ParticipantService participantService;
-
-    private final ActivityService activityService;
-
-    private final LinkService linkService;
-
     private final TripService tripService;
-
-    private final TripRepository tripRepository;
 
 
     @PostMapping

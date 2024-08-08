@@ -4,6 +4,7 @@ import com.joaoeduardo.planner_backend.activity.ActivityData;
 import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
 import com.joaoeduardo.planner_backend.activity.ActivityResponse;
 import com.joaoeduardo.planner_backend.activity.ActivityService;
+import com.joaoeduardo.planner_backend.activity.validation.ActivityValidator;
 import com.joaoeduardo.planner_backend.link.LinkData;
 import com.joaoeduardo.planner_backend.link.LinkRequestPayload;
 import com.joaoeduardo.planner_backend.link.LinkResponse;
@@ -34,7 +35,9 @@ public class TripService {
 
     private final LinkService linkService;
 
-    private final List<TripValidator> validators;
+    private final List<TripValidator> tripValidators;
+
+    private final List<ActivityValidator> activityValidators;
 
 
 
@@ -44,7 +47,7 @@ public class TripService {
 
         Trip newTrip = new Trip(tripRequestPayload);
 
-        validators.forEach( v -> v.validate(tripRequestPayload));
+        tripValidators.forEach( v -> v.validate(tripRequestPayload));
 
         tripRepository.save(newTrip);
 
@@ -153,6 +156,8 @@ public class TripService {
         if(trip.isPresent()){
 
             Trip rawTrip = trip.get();
+
+            activityValidators.forEach( v -> v.validate(activityRequestPayload, rawTrip));
 
             return activityService.registerActivity(activityRequestPayload, rawTrip);
 
