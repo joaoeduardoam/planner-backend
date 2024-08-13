@@ -3,6 +3,7 @@ package com.joaoeduardo.planner_backend.trip;
 import com.joaoeduardo.planner_backend.activity.ActivityData;
 import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
 import com.joaoeduardo.planner_backend.activity.ActivityResponse;
+import com.joaoeduardo.planner_backend.activity.DayActivities;
 import com.joaoeduardo.planner_backend.link.LinkData;
 import com.joaoeduardo.planner_backend.link.LinkRequestPayload;
 import com.joaoeduardo.planner_backend.link.LinkResponse;
@@ -19,9 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TripController {
 
-
     private final TripService tripService;
-
 
     @PostMapping
     public ResponseEntity<TripCreateResponse> createTrip(@RequestBody TripRequestPayload tripRequestPayload){
@@ -92,11 +91,11 @@ public class TripController {
     }
 
     @GetMapping("/{tripId}/activities")
-    public ResponseEntity<List<ActivityData>> getAllActivities(@PathVariable UUID tripId){
+    public ResponseEntity<List<DayActivities>> getAllActivities(@PathVariable UUID tripId){
 
-        List<ActivityData> activityDataList = tripService.getAllActivitiesByTrip(tripId);
+        List<DayActivities> dayActivitiesList = tripService.getAllActivitiesByTrip(tripId);
 
-        return ResponseEntity.ok(activityDataList);
+        return ResponseEntity.ok(dayActivitiesList);
 
     }
 

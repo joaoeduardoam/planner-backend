@@ -1,13 +1,18 @@
 package com.joaoeduardo.planner_backend.activity;
 
 import com.joaoeduardo.planner_backend.trip.Trip;
+import com.joaoeduardo.planner_backend.trip.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +35,33 @@ public class ActivityService {
 
     }
 
-    public List<ActivityData> getAllActivities(UUID tripId) {
+    public List<DayActivities> getAllActivities(UUID tripId) {
+
         List<Activity> activities = activityRepository.findByTripId(tripId);
 
         List<ActivityData> activitiesData = activities.stream().map(ActivityData::new).toList();
 
-        return activitiesData;
+        List<DayActivities> dayActivitiesList = getActivitiesByDay(activitiesData);
+
+
+        return dayActivitiesList;
+    }
+
+    private List<DayActivities> getActivitiesByDay(List<ActivityData> activitiesData) {
+
+
+        Map<LocalDate, List<ActivityData>> groupedByDay = activitiesData.stream()
+                .collect(Collectors.groupingBy(activity -> activity.occurs_at().toLocalDate()));
+
+        System.out.println("GroupedByDay: "+groupedByDay);
+
+        List<DayActivities> dayActivitiesList = groupedByDay.entrySet().stream()
+                .map(entry -> new DayActivities(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        System.out.println("dayActivitiesList: "+dayActivitiesList);
+
+        return dayActivitiesList;
+
     }
 }

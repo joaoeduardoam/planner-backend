@@ -1,9 +1,6 @@
 package com.joaoeduardo.planner_backend.trip;
 
-import com.joaoeduardo.planner_backend.activity.ActivityData;
-import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
-import com.joaoeduardo.planner_backend.activity.ActivityResponse;
-import com.joaoeduardo.planner_backend.activity.ActivityService;
+import com.joaoeduardo.planner_backend.activity.*;
 import com.joaoeduardo.planner_backend.activity.validation.ActivityValidator;
 import com.joaoeduardo.planner_backend.link.LinkData;
 import com.joaoeduardo.planner_backend.link.LinkRequestPayload;
@@ -167,7 +164,7 @@ public class TripService {
 
     }
 
-    public List<ActivityData> getAllActivitiesByTrip(UUID tripId){
+    public List<DayActivities> getAllActivitiesByTrip(UUID tripId){
 
         Optional<Trip> trip = tripRepository.findById(tripId);
 
