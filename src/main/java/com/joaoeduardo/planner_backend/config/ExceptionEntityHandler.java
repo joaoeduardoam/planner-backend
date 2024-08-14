@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 @ControllerAdvice
 public class ExceptionEntityHandler {
@@ -43,14 +44,26 @@ public class ExceptionEntityHandler {
 
     }
 
-//    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-//    public ResponseEntity<StandardError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception,
-//                                                                            HttpServletRequest request){
-//
-//        HttpStatus status = HttpStatus.NOT_FOUND;
-//        StandardError error = new StandardError(Instant.now(), status.value(), "Resource Not Found with provided ID!",
-//                exception.getMessage(), request.getRequestURI());
-//        return ResponseEntity.status(status).body(error);
-//    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<StandardError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception,
+                                                                            HttpServletRequest request){
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        StandardError error = new StandardError(Instant.now(), status.value(), "Resource Not Found with provided ID!",
+                exception.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<StandardError> handleDateTimeParseException(DateTimeParseException exception,
+                                                                                   HttpServletRequest request){
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        StandardError error = new StandardError(Instant.now(), status.value(), "Provided date is invalid!",
+                exception.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(error);
+    }
+
+
 
 }

@@ -1,6 +1,5 @@
 package com.joaoeduardo.planner_backend.trip;
 
-import com.joaoeduardo.planner_backend.activity.ActivityData;
 import com.joaoeduardo.planner_backend.activity.ActivityRequestPayload;
 import com.joaoeduardo.planner_backend.activity.ActivityResponse;
 import com.joaoeduardo.planner_backend.activity.DayActivities;
@@ -32,11 +31,11 @@ public class TripController {
     }
 
     @GetMapping("/{tripId}")
-    public ResponseEntity<Trip> getTripDetails(@PathVariable UUID tripId){
+    public ResponseEntity<TripDetails> getTripDetails(@PathVariable UUID tripId){
 
         Trip trip = tripService.getTripDetails(tripId);
 
-        return ResponseEntity.ok(trip);
+        return ResponseEntity.ok(new TripDetails(trip));
 
     }
 
@@ -50,11 +49,11 @@ public class TripController {
     }
 
     @GetMapping("/{tripId}/confirm")
-    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID tripId){
+    public ResponseEntity<TripDetails> confirmTrip(@PathVariable UUID tripId){
 
         Trip trip = tripService.confirmTrip(tripId);
 
-        return ResponseEntity.ok(trip);
+        return ResponseEntity.ok(new TripDetails(trip));
 
     }
 
