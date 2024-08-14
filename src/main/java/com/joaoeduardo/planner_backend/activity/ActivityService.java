@@ -9,9 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +26,7 @@ public class ActivityService {
                 .title(activityRequestPayload.title())
                 .occursAt(occursAt)
                 .trip(trip).build();
+
 
         activityRepository.save(newActivity);
 
@@ -53,13 +52,21 @@ public class ActivityService {
         Map<LocalDate, List<ActivityData>> groupedByDay = activitiesData.stream()
                 .collect(Collectors.groupingBy(activity -> activity.occurs_at().toLocalDate()));
 
-        System.out.println("GroupedByDay: "+groupedByDay);
+        Map<LocalDate, List<ActivityData>> sortedGroupedByDay = new TreeMap<>(groupedByDay);
 
-        List<DayActivities> dayActivitiesList = groupedByDay.entrySet().stream()
+        sortedGroupedByDay.forEach((key, value) ->
+                value.sort(Comparator.comparing(ActivityData::occurs_at))
+        );
+//        sortedGroupedByDay.forEach((key, value) ->
+//                value.sort((a, b) -> a.occurs_at().compareTo(b.occurs_at()))
+//        );
+
+
+
+        List<DayActivities> dayActivitiesList = sortedGroupedByDay.entrySet().stream()
                 .map(entry -> new DayActivities(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
 
-        System.out.println("dayActivitiesList: "+dayActivitiesList);
 
         return dayActivitiesList;
 

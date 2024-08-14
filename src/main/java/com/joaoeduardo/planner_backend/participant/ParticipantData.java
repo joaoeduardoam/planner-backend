@@ -6,8 +6,7 @@ public record ParticipantData(
         UUID id,
         String name,
         String email,
-
-        Boolean isConfirmed
+        Boolean is_confirmed
 ) {
     public ParticipantData(Participant participant) {
 
